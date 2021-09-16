@@ -1,0 +1,22 @@
+{
+  "name": "platziverse-db",
+  "version": "1.0.0",
+  "description": "A simple IoT Platform - DB Module",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Platzi-courses-completed/node-avanced.git"
+  },
+  "author": "JMR-Mejia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Platzi-courses-completed/node-avanced/issues"
+  },
+  "homepage": "https://github.com/Platzi-courses-completed/node-avanced#readme",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}
