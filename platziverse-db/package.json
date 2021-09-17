@@ -4,7 +4,7 @@
   "description": "A simple IoT Platform - DB Module",
   "main": "index.js",
   "scripts": {
-    "test": "DEBUG=platziverse:* ava --verbose",
+    "test": "DEBUG=platziverse:* nyc --reporter=lcov ava --verbose",
     "setup": "DEBUG=platziverse:* node setup.js",
     "lint": "standard"
   },
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Platzi-courses-completed/node-avanced#readme",
   "devDependencies": {
     "ava": "^3.15.0",
+    "nyc": "^15.1.0",
     "sqlite3": "^4.2.0",
     "standard": "^16.0.3"
   },
