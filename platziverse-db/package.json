@@ -6,6 +6,7 @@
   "scripts": {
     "test": "DEBUG=platziverse:* nyc --reporter=lcov ava --verbose",
     "setup": "DEBUG=platziverse:* node setup.js",
+    "setup:deploy": "npm run setup -- --yes",
     "lint": "standard"
   },
   "repository": {
