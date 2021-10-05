@@ -149,12 +149,13 @@ test.serial('Agent#findConnected', async t => {
 })
 
 test.serial('Agent#FindByUuid', async t => {
-  let agents = await db.Agent.findByUuid(uuid)
+  const agent = await db.Agent.findByUuid(uuid)
 
   t.true(AgentStub.findOne.called, 'findOne should be called on model')
   t.true(AgentStub.findOne.calledOnce, 'findOne should be called once')
   t.true(AgentStub.findOne.calledWith(uuidArgs), 'findOne should be called with args')
 
+  t.deepEqual(agent, agentFixtures.byUuid(uuid), 'agent should be the same')
 })
 
 test.serial('Agent#findAll', async t => {
