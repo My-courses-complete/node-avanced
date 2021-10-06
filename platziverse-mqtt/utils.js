@@ -6,9 +6,9 @@ function parsePayload (payload) {
   }
 
   try {
-    payload = JSON.parse(payload)
+    return payload = JSON.parse(payload)
   } catch (error) {
-    payload = null
+    return payload = null
   }
 }
 

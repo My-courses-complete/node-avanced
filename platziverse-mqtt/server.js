@@ -44,7 +44,6 @@ function startAedes () {
     Agent = services.Agent
 
     debug(`${chalk.green('[platziverse-mqtt]')} server is running`)
-    aedes.publish({ topic: 'agent/message', payload: "I'm broker " + aedes.id })
   })
 
   aedes.on('client', client => {
@@ -122,16 +121,18 @@ function startAedes () {
             })
 
             // Store Metrics
-            for (const metric of payload.metrics) {
-              let m
-
-              try {
-                m = await Metric.create(agent.uuid, metric)
-              } catch (error) {
-                return handleError(error)
-              }
-
-              debug(`Metric ${m.id} saved on agent ${agent.uuid}`)
+            try {
+              await Promise.all(payload.metrics.map(async metric => {
+                let createdMetric
+                try {
+                  createdMetric = await Metric.create(agent.uuid, metric)
+                } catch (error) {
+                  return handleError(error)
+                }
+                debug(`Metric ${createdMetric.id} saved on agent ${agent.uuid}`)
+              }))
+            } catch (error) {
+              return handleError(error)
             }
           }
         }
