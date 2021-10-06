@@ -5,8 +5,11 @@
   "description": "A Simple IoT Platform - Agent",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "standard"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "standard": "^16.0.4"
+  }
 }
