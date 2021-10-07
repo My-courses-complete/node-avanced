@@ -27,7 +27,7 @@ agent.connect()
 
 agent.on('connected')
 agent.on('disconnected')
-agent.on('message)
+agent.on('message')
 
 agent.on('agent/connected')
 agent.on('agent/disconnected')
