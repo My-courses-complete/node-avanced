@@ -6,6 +6,6 @@ const config = require('../config')
 
 module.exports = {
   db: {
-    ...config(false, debug),
+    ...config(false, debug)
   }
 }
