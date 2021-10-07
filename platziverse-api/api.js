@@ -10,8 +10,12 @@ api.get('/agents', (req, res) => {
   res.send({})
 })
 
-api.get('/agents/:uuid', (req, res) => {
+api.get('/agents/:uuid', (req, res, next) => {
   const { uuid } = req.params
+
+  if (uuid !== 'yyy') {
+    return next(new Error('Agent not found'))
+  }
   res.send({ uuid })
 })
 
