@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production node server.js",
     "start-dev": "DEBUG=platziverse:* nodemon server.js",
     "start-debug": "DEBUG=* nodemon",
+    "test": "DEBUG=platziverse:* ava --verbose",
     "lint": "standard"
   },
   "repository": {
@@ -21,8 +22,10 @@
   },
   "homepage": "https://github.com/JMR-Mejia/node-advance#readme",
   "devDependencies": {
+    "ava": "^3.15.0",
     "nodemon": "^2.0.13",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "supertest": "^6.1.6"
   },
   "dependencies": {
     "chalk": "^4.1.2",

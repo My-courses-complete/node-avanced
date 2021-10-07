@@ -29,9 +29,13 @@ function handleFatalError (err) {
   process.exit(1)
 }
 
-process.on('uncaughtException', handleFatalError)
-process.on('unhandledRejection', handleFatalError)
+if (!module.main) {
+  process.on('uncaughtException', handleFatalError)
+  process.on('unhandledRejection', handleFatalError)
 
-server.listen(port, () => {
-  debug(`listening in ${chalk.green(`http://localhost:${port}`)}`)
-})
+  server.listen(port, () => {
+    debug(`listening in ${chalk.green(`http://localhost:${port}`)}`)
+  })
+}
+
+module.exports = server
