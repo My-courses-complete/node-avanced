@@ -1,9 +1,30 @@
 'use strict'
 
 const debug = require('debug')('platziverse:api:routes')
+const chalk = require('chalk')
 const express = require('express')
+const db = require('platziverse-db')
+
+const config = require('./config')
 
 const api = express.Router()
+
+let services, Agent, Metric
+
+api.use('*', async (req, res,next) => {
+  if(!services) {
+    debug(`${chalk.green(['Conecting to database'])}`)
+    try {
+      services = await db(config.db)
+    } catch (error) {
+      return next(error)
+    }
+
+    Agent = services.Agent
+    Metric = services.Metric
+  }
+  next()
+})
 
 api.get('/agents', (req, res) => {
   debug('A request has come to /agents')
