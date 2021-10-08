@@ -29,7 +29,7 @@ function handleFatalError (err) {
   process.exit(1)
 }
 
-if (!module.main) {
+if (require.main === module) {
   process.on('uncaughtException', handleFatalError)
   process.on('unhandledRejection', handleFatalError)
 

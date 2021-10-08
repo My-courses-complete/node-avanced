@@ -32,7 +32,7 @@ api.get('/agents', async (req, res, next) => {
   try {
     agents = await Agent.findConnected()
   } catch (error) {
-    return next(e)
+    return next(error)
   }
   res.send(agents)
 })
