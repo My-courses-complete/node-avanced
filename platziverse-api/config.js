@@ -2,10 +2,10 @@
 
 const debug = require('debug')('platziverse:api:db')
 
-const config = require('../config')
+const { db, auth} = require('../config')(false, debug)
 
 module.exports = {
-  db: {
-    ...config(false, debug)
-  }
+  db,
+  auth,
+
 }
