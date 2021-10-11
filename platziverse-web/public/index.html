@@ -16,9 +16,13 @@
       console.log(payload)
     })
 
-    setTimeout(function() {
-      socket.emit('agent/message', 'hello server')
-    }, 5000)
+    socket.on('agent/connected', function(payload) {
+      console.log('agent/connected', payload)
+    })
+
+    socket.on('agent/disconnected', function(payload) {
+      console.log('agent/disconnected', payload)
+    })
   </script>
 </body>
 </html>
