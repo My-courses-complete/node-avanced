@@ -2,16 +2,21 @@
 
 const test = require('ava')
 const request = require('supertest')
+const util = require('util')
 const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 
 const agentFixtures = require('./fixtures/agent')
 const metricsFixtures = require('./fixtures/metric')
+const auth = require('../auth')
+const config = require('../config')
+const sign = util.promisify(auth.sign)
 
 let sandbox = null
 let api = null
 let server = null
 let dbStub = null
+let token = null
 const AgentStub = {}
 const MetricStub = {}
 
@@ -44,6 +49,8 @@ test.beforeEach(async () => {
   MetricStub.findByTypeAgentUuid = sandbox.stub()
   MetricStub.findByTypeAgentUuid.withArgs(type, uuid).returns(Promise.resolve(metricsFixtures.findByTypeAgentUuid(type, id)))
 
+  token = await sign({ admin: true, username: 'platzi' }, config.auth.secret)
+
   api = proxyquire('../api', {
     'platziverse-db': dbStub
   })
@@ -60,6 +67,7 @@ test.afterEach(() => {
 test.serial.cb('/api/agents', (t) => {
   request(server)
     .get('/api/agents')
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /json/)
     .end((err, res) => {
@@ -143,14 +151,28 @@ test.serial.cb('api/metrics/:uuid/:type', t => {
 })
 test.serial.cb('api/metrics/:uuid/:type - not found', t => {
   request(server)
-  .get(`/api/metrics/${uuid}/${typeNotFound}`)
-  .expect(200)
-  .expect('Content-Type', /json/)
-  .end((err, res) => {
-    t.truthy(err, 'should return an error')
-    const body = JSON.stringify(res.body)
-    const expected = JSON.stringify({ error: `Metrics (${typeNotFound}) not found for agent with uuid ${uuid}`})
-    t.deepEqual(body, expected, 'response body should be the expected')
-    t.end()
-  })
+    .get(`/api/metrics/${uuid}/${typeNotFound}`)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end((err, res) => {
+      t.truthy(err, 'should return an error')
+      const body = JSON.stringify(res.body)
+      const expected = JSON.stringify({ error: `Metrics (${typeNotFound}) not found for agent with uuid ${uuid}` })
+      t.deepEqual(body, expected, 'response body should be the expected')
+      t.end()
+    })
+})
+
+test.serial.cb('api/agents - not token', t => {
+  request(server)
+    .get('/api/agents')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end((err, res) => {
+      t.truthy(err, 'should return an error')
+      const body = JSON.stringify(res.body)
+      const expected = JSON.stringify({ error: 'No authorization token was found' })
+      t.deepEqual(body, expected, 'response body should be the expected')
+      t.end()
+    })
 })

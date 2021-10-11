@@ -24,7 +24,6 @@ function extend (obj, values) {
 function findByAgentUuid (uuid) {
   return metrics.filter(m => m.agentId ? m.agentId === uuid : false).map(m => {
     const clone = Object.assign({}, m)
-    console.log(clone)
     delete m.agent
     return clone
   })
