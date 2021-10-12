@@ -1,5 +1,6 @@
 <template>
   <div>
+    <metric uuid="yyy" type="temp"/>
     <agent
       v-for="agent in agents"
       :uuid="agent.uuid"

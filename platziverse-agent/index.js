@@ -24,8 +24,8 @@ class PlatziverseAgent extends EventEmitter {
     super()
 
     this._options = defaults(opts, options)
+    this._started = false
     this._timer = null
-    this._started = null
     this._client = null
     this._agentId = null
     this._metrics = new Map()
@@ -52,7 +52,7 @@ class PlatziverseAgent extends EventEmitter {
 
       this._client.on('connect', () => {
         this._agentId = uuid.v4()
-        this.emit('connected')
+        this.emit('connect', this._agentId)
 
         this._timer = setInterval(async () => {
           if (this._metrics.size > 0) {

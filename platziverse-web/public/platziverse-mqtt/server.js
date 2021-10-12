@@ -83,7 +83,6 @@ function startAedes () {
 
   aedes.on('publish', async (packet, client) => {
     debug(`Received: ${packet.topic}`)
-    console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
     switch (packet.topic) {
       case 'agent/connected':
         debug(`Payload: ${packet.payload}`)
