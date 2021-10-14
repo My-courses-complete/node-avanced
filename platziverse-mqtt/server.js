@@ -1,6 +1,5 @@
 'use strict'
 
-const cluster = require('cluster')
 const debug = require('debug')('platziverse:mqtt')
 const chalk = require('chalk')
 const mqemitter = require('mqemitter-redis')
@@ -83,7 +82,6 @@ function startAedes () {
 
   aedes.on('publish', async (packet, client) => {
     debug(`Received: ${packet.topic}`)
-    console.log('Client \x1b[31m' + (client ? client.id : 'BROKER_' + aedes.id) + '\x1b[0m has published', packet.payload.toString(), 'on', packet.topic, 'to broker', aedes.id)
     switch (packet.topic) {
       case 'agent/connected':
         debug(`Payload: ${packet.payload}`)
@@ -121,24 +119,23 @@ function startAedes () {
                 }
               })
             })
+          }
 
-            // Store Metrics
-            const saveMetricPromise = []
-            for (const metric of payload.metrics) {
-              saveMetricPromise.push(
-                new Promise((resolve, reject) => {
-                  Metric.create(agent.uuid, metric)
+          // Store Metrics
+          const saveMetricPromise = []
+          for (const metric of payload.metrics) {
+            saveMetricPromise.push(
+              new Promise((resolve, reject) => {
+                Metric.create(agent.uuid, metric)
                   .then(m => {
                     debug(`Metric ${m.id} saved on agent ${agent.uuid}`)
                     resolve(m)
                   })
                   .catch(reject)
-                })
-              )
-            }
-            await Promise.all(saveMetricPromise)
-            debug('Termino de almacenar todas las metrica')
+              })
+            )
           }
+          await Promise.all(saveMetricPromise)
         }
         break
     }
@@ -148,24 +145,7 @@ function startAedes () {
   aedes.on('error', handleFatalError)
 }
 
-if (cluster.isMaster) {
-  const numWorkers = require('os').cpus().length
-  for (let i = 0; i < numWorkers; i++) {
-    cluster.fork()
-  }
-
-  cluster.on('online', function (worker) {
-    console.log('Worker ' + worker.process.pid + ' is online')
-  })
-
-  cluster.on('exit', function (worker, code, signal) {
-    console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal)
-    console.log('Starting a new worker')
-    cluster.fork()
-  })
-} else {
-  startAedes()
-}
+startAedes()
 
 function handleFatalError (err) {
   console.error(`${chalk.red('[fatal error]')} ${err.message}`)
