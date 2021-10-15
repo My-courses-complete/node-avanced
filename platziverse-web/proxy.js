@@ -10,7 +10,6 @@ const api = express.Router()
 
 api.get('/agents', async (req, res, next) => {
   const options = {
-    method: 'get',
     headers: {
       'Authorization': `Bearer ${apiToken}`
     },

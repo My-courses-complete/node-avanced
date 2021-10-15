@@ -1,10 +1,10 @@
 <template>
   <div>
-    <agent uuid="f8bae5e6-ef55-43d8-a638-3a4aa9751703" :socket="socket"></agent>
     <agent
       v-for="agent in agents"
       :uuid="agent.uuid"
-      :key="agent.uuid">
+      :key="agent.uuid"
+      :socket="socket">
     </agent>
     <p v-if="error">{{error}}</p>
   </div>
@@ -19,6 +19,7 @@
 </style>
 
 <script>
+const axios = require('axios')
 const io = require('socket.io-client')
 const socket = io()
 
@@ -36,7 +37,25 @@ module.exports = {
   },
 
   methods: {
-    initialize () {
+    async initialize () {
+      let result
+      try {
+        result = await axios.get(`http://localhost:8080/agents`).then(res => res.data)
+      } catch (error) {
+        this.error = error.error
+        return
+      }
+
+      this.agents = result
+
+      socket.on('agent/connected', payload => {
+        const { uuid } = payload.agent
+        const existing = this.agents.find(a => a.uuid = uuid)
+        console.log('existing', existing)
+        if(!existing) {
+          this.agents.push(payload.agent)
+        }
+      })
     }
   }
 }
