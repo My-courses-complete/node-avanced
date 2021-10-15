@@ -19,9 +19,9 @@
     font-weight: normal;
     font-family: 'Roboto', sans-serif;
   }
-  canvas {
+  /* canvas {
     margin: 0 auto;
-  }
+  } */
 </style>
 <script>
 const axios = require('axios')
@@ -57,7 +57,7 @@ module.exports = {
 
       let result
       try {
-        result = await axios.get(`http://localhost:8000/metrics/${uuid}/${type}`).then(res => res.data)
+        result = await axios.get(`http://localhost:8080/metrics/${uuid}/${type}`).then(res => res.data)
       } catch (e) {
         this.error = e.error.error
         return
@@ -73,9 +73,6 @@ module.exports = {
           data.push(m.value)
         })
       }
-
-      console.log('labels:', labels)
-      console.log('data:', data)
 
       this.datacollection = {
         labels,

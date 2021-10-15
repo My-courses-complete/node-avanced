@@ -27,11 +27,44 @@ api.get('/agents', async (req, res, next) => {
   res.send(result)
 })
 
-api.get('/agents/:uuid', (req, res) => {})
+api.get('/agents/:uuid', async (req, res, next) => {
+  const { uuid } = req.params
+  const options = {
+    headers: {
+      'Authorization': `Bearer ${apiToken}`
+    },
+    json: true
+  }
+  let agent
+  try {
+    agent = await axios.get(`${endpoint}/api/agents/${uuid}`, options).then(res => res.data)
+  } catch (error) {
+    next(error)
+  }
 
-api.get('/metrics/:uuid', (req, res) => {})
+  res.send(agent)
+})
 
-api.get('/metrics/:uuid/:type', async (req, res) => {
+api.get('/metrics/:uuid', async (req, res, next) => {
+  const { uuid } = req.params
+  const options = {
+    headers: {
+      'Authorization': `Bearer ${apiToken}`
+    },
+    json: true
+  }
+  
+  let result
+  try {
+    result = await axios.get(`${endpoint}/api/metrics/${uuid}`, options).then(res => res.data)
+  } catch (error) {
+    next(error)
+  }
+
+  res.send(result)
+})
+
+api.get('/metrics/:uuid/:type', async (req, res, next) => {
   const { uuid, type} = req.params
   const options = {
     headers: {

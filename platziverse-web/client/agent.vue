@@ -9,6 +9,7 @@
         <h3 class="metrics-title">Metrics</h3>
         <metric
           :uuid="uuid"
+          :socket="socket"
           v-for="metric in metrics"
           v-bind:type="metric.type"
           v-bind:key="metric.type"
@@ -73,15 +74,17 @@
 </style>
 
 <script>
+const axios = require('axios')
 
 module.exports = {
-  props: [ 'uuid' ],
+  props: [ 'uuid', 'socket' ],
 
   data() {
     return {
       name: null,
       hostname: null,
       connected: false,
+      pid: null,
       showMetrics: false,
       error: null,
       metrics: []
@@ -93,7 +96,37 @@ module.exports = {
   },
 
   methods: {
-    initialize() {
+    async initialize() {
+      const { uuid } = this
+
+      let agent
+      try {
+        agent = await axios.get(`http://localhost:8080/agents/${uuid}`).then(res => res.data)
+      } catch (error) {
+        this.error= error.error.error
+        return
+      }
+
+      this.name = agent.name
+      this.hostname = agent.hostname
+      this.connected = agent.connected
+      this.pid = agent.pid
+
+      this.loadMetrics()
+    },
+
+    async loadMetrics() {
+      const { uuid } = this
+
+      let metrics
+      try {
+        metrics = await axios.get(`http://localhost:8080/metrics/${uuid}`).then(res => res.data)
+      } catch (error) {
+        this.error = error.error.error
+        return
+      }
+
+      this.metrics = metrics
     },
 
     toggleMetrics() {

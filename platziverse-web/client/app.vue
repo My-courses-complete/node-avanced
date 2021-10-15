@@ -1,6 +1,6 @@
 <template>
   <div>
-    <metric uuid="75b2975e-ff92-4cf5-8b3c-736ce666d54d" type="rss" :socket="socket"></metric>
+    <agent uuid="f8bae5e6-ef55-43d8-a638-3a4aa9751703" :socket="socket"></agent>
     <agent
       v-for="agent in agents"
       :uuid="agent.uuid"
