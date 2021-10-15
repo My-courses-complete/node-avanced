@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "NODE_ENV=production node server.js",
+    "prestart": "npm run build",
     "start-dev": "DEBUG=platziverse:* nodemon server.js",
+    "prestart-dev": "npm run build",
+    "build": "browserify -t babelify -t vueify client/app.js -o public/bundle.js",
     "lint": "standard"
   },
   "repository": {
@@ -15,14 +18,27 @@
   "author": "JMR-Mejia",
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babelify": "^10.0.0",
+    "browserify": "^17.0.0",
     "nodemon": "^2.0.13",
-    "standard": "^16.0.4"
+    "standard": "^16.0.4",
+    "vueify": "^9.4.1"
   },
   "dependencies": {
+    "axios": "^0.22.0",
     "chalk": "^4.1.2",
+    "chart.js": "^3.5.1",
     "debug": "^3.2.7",
     "express": "^4.17.1",
+    "moment": "^2.29.1",
     "platziverse-agent": "file:../platziverse-agent",
-    "socket.io": "^4.2.0"
+    "random-material-color": "^1.0.5",
+    "socket.io": "^4.2.0",
+    "socket.io-client": "^4.2.0",
+    "vue": "^2.6.14",
+    "vue-chartjs": "^3.5.1"
   }
 }

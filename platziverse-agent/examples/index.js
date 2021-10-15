@@ -14,14 +14,14 @@ agent.addMetric('promiseMetric', function getRandomPromise () {
   return Promise.resolve(Math.random())
 })
 
-agent.addMetric('callback', function getRandomCallback (callback) {
+agent.addMetric('callbackMetric', function getRandomCallback (callback) {
   setTimeout(() => { callback(null, Math.random()) }, 1000)
 })
 
 agent.connect()
 
 agent.on('connect', handler)
-agent.on('disconnected', handler)
+agent.on('disconnect', handler)
 agent.on('message', handler)
 
 agent.on('agent/connected', handler)
@@ -31,5 +31,3 @@ agent.on('agent/message', handler)
 function handler (payload) {
   console.log(payload)
 }
-
-setTimeout(() => agent.disconnect(), 20000)
