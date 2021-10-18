@@ -75,6 +75,7 @@
 
 <script>
 const axios = require('axios')
+const {serverHost} = require('../config')
 
 module.exports = {
   props: [ 'uuid', 'socket' ],
@@ -101,7 +102,7 @@ module.exports = {
 
       let agent
       try {
-        agent = await axios.get(`http://localhost:8080/agents/${uuid}`).then(res => res.data)
+        agent = await axios.get(`${serverHost}/agents/${uuid}`).then(res => res.data)
       } catch (error) {
         this.error= error.error.error
         return
@@ -120,7 +121,7 @@ module.exports = {
 
       let metrics
       try {
-        metrics = await axios.get(`http://localhost:8080/metrics/${uuid}`).then(res => res.data)
+        metrics = await axios.get(`${serverHost}/metrics/${uuid}`).then(res => res.data)
       } catch (error) {
         this.error = error.error.error
         return

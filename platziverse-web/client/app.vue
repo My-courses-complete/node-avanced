@@ -21,6 +21,7 @@
 <script>
 const axios = require('axios')
 const io = require('socket.io-client')
+const { serverHost } = require('../config')
 const socket = io()
 
 module.exports = {
@@ -40,7 +41,7 @@ module.exports = {
     async initialize () {
       let result
       try {
-        result = await axios.get(`http://localhost:8080/agents`).then(res => res.data)
+        result = await axios.get(`${serverHost}/agents`).then(res => res.data)
       } catch (error) {
         this.error = error.error
         return
